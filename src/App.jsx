@@ -5,6 +5,7 @@ import Layout from "./components/pages/Layout";
 import Home from "./components/pages/Home";
 import Contact from "./components/pages/Contact";
 import UserLogin from "./components/pages/auth/UserLogin";
+import ResetPassword from "./components/pages/auth/ResetPassword";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
             <Route index element={<Home />} />
             <Route path="contact" element={<Contact />} />
             <Route path="login" element={<LoginReg />} />
+            <Route path="resetPassword" element={<ResetPassword />} />
           </Route>
         </Routes>
       </BrowserRouter>

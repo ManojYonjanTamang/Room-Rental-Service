@@ -25,6 +25,7 @@ const UserRegistration = () => {
       name: formData.get("name"),
       email: formData.get("email"),
       password: formData.get("password"),
+      contactNumber: formData.get("contactNumber"),
       password_confirmation: formData.get("password-confirmation"),
       termCondition: formData.get("termCondition"),
     };
@@ -32,6 +33,7 @@ const UserRegistration = () => {
     if (
       actualData.name &&
       actualData.email &&
+      actualData.contactNumber &&
       actualData.password &&
       actualData.termCondition
     ) {
@@ -42,9 +44,8 @@ const UserRegistration = () => {
           status: true,
           message: "Registration Success",
           type: "success",
-
-          // navigate("/contact");
         });
+        navigate("/contact");
       } else {
         setErrorSuccess({
           status: true,
@@ -86,6 +87,15 @@ const UserRegistration = () => {
           type="email"
           name="email"
           id="email"
+        />
+
+        <TextField
+          label="Phone Number"
+          fullWidth
+          margin="normal"
+          type="text"
+          name="contactNumber"
+          id="contactNumber"
         />
 
         <TextField

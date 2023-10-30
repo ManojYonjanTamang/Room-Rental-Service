@@ -79,7 +79,7 @@ const UserLogin = () => {
           </Button>
         </Box>
 
-        <NavLink to="/">Forgot Password?</NavLink>
+        <NavLink to="/resetPassword">Forgot Password?</NavLink>
 
         {errorSuccess.status ? (
           <Alert severity={errorSuccess.type}>{errorSuccess.message}</Alert>
