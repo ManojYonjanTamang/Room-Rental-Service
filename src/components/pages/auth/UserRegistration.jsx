@@ -24,9 +24,9 @@ const UserRegistration = () => {
     const actualData = {
       name: formData.get("name"),
       email: formData.get("email"),
-      password: formData.get("password"),
       contactNumber: formData.get("contactNumber"),
-      password_confirmation: formData.get("password-confirmation"),
+      password: formData.get("password"),
+      confirmPassword: formData.get("password-confirmation"),
       termCondition: formData.get("termCondition"),
     };
 
@@ -37,7 +37,7 @@ const UserRegistration = () => {
       actualData.password &&
       actualData.termCondition
     ) {
-      if (actualData.password === actualData.password_confirmation) {
+      if (actualData.password === actualData.confirmPassword) {
         console.log(actualData);
         document.getElementById("registration_form").reset();
         setErrorSuccess({

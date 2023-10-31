@@ -1,7 +1,9 @@
-import { Alert, Box, Button, Grid, TextField } from "@mui/material";
-import React, { useState } from "react";
+import { Grid, Box, TextField, Alert, Button } from "@mui/material";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const ResetPassword = () => {
+  const navigate = useNavigate();
   const [errorSuccess, setErrorSuccess] = useState({
     status: false,
     message: "",
@@ -12,20 +14,32 @@ const ResetPassword = () => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const actualData = {
-      email: formData.get("email"),
+      password: formData.get("password"),
+      confirmPassword: formData.get("password-confirmation"),
     };
 
-    if (actualData.email) {
-      document.getElementById("password-reset-form").reset();
-      setErrorSuccess({
-        status: true,
-        message: "Please check your email to reset password",
-        type: "success",
-      });
+    if (actualData.password && actualData.confirmPassword) {
+      if (actualData.password === actualData.confirmPassword) {
+        document.getElementById("reset-password").reset();
+        setErrorSuccess({
+          status: true,
+          message: "Reset Password Successful. Redirecting to Login Page...",
+          type: "success",
+        });
+        setTimeout(() => {
+          navigate("/");
+        }, 2000);
+      } else {
+        setErrorSuccess({
+          status: true,
+          message: "Password not matching!",
+          type: "error",
+        });
+      }
     } else {
       setErrorSuccess({
         status: true,
-        message: "Please provide valid email",
+        message: "All fields are required!",
         type: "error",
       });
     }
@@ -38,16 +52,27 @@ const ResetPassword = () => {
             component="form"
             noValidate
             sx={{ mt: 1 }}
-            id="password-reset-form"
+            id="reset-password"
             onSubmit={handleSubmit}
           >
             <TextField
+              type="password"
+              name="password"
+              id="password"
+              label="New Password"
+              fullWidth
               margin="normal"
               required
+            />
+
+            <TextField
+              type="password"
+              name="password-confirmation"
+              id="password-confirmation"
+              label="Confirm New Password"
               fullWidth
-              id="email"
-              name="email"
-              label="Enter your email address"
+              margin="normal"
+              required
             />
 
             <Box textAlign="center">
@@ -56,7 +81,7 @@ const ResetPassword = () => {
                 variant="contained"
                 sx={{ mt: 3, px: 5, mb: 2 }}
               >
-                Send
+                Save
               </Button>
             </Box>
 

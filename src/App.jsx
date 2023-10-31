@@ -1,10 +1,9 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import LoginReg from "./components/pages/auth/LoginReg";
-import Navbar from "./components/Navbar";
 import Layout from "./components/pages/Layout";
 import Home from "./components/pages/Home";
 import Contact from "./components/pages/Contact";
-import UserLogin from "./components/pages/auth/UserLogin";
+import ForgotPwdSendEmail from "./components/pages/auth/ForgotPwdSendEmail";
 import ResetPassword from "./components/pages/auth/ResetPassword";
 
 function App() {
@@ -16,7 +15,12 @@ function App() {
             <Route index element={<Home />} />
             <Route path="contact" element={<Contact />} />
             <Route path="login" element={<LoginReg />} />
-            <Route path="resetPassword" element={<ResetPassword />} />
+            <Route
+              path="forgot-password-send-email"
+              element={<ForgotPwdSendEmail />}
+            />
+            <Route path="reset-password" element={<ResetPassword />} />
+            ResetPassword
           </Route>
         </Routes>
       </BrowserRouter>
