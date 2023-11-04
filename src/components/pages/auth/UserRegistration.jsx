@@ -38,14 +38,13 @@ const UserRegistration = () => {
       actualData.termCondition
     ) {
       if (actualData.password === actualData.confirmPassword) {
-        console.log(actualData);
         document.getElementById("registration_form").reset();
         setErrorSuccess({
           status: true,
           message: "Registration Success",
           type: "success",
         });
-        navigate("/contact");
+        navigate("/dashboard");
       } else {
         setErrorSuccess({
           status: true,
@@ -54,7 +53,6 @@ const UserRegistration = () => {
         });
       }
     } else {
-      console.log("error");
       setErrorSuccess({
         status: true,
         message: "All fields are required",
@@ -68,8 +66,9 @@ const UserRegistration = () => {
       <Box
         component="form"
         id="registration_form"
-        mt={2}
+        sx={{ mt: 2 }}
         onSubmit={handleSubmit}
+        noValidate
       >
         <TextField
           label="Name"
@@ -78,8 +77,8 @@ const UserRegistration = () => {
           type="name"
           name="name"
           id="name"
+          required
         />
-
         <TextField
           label="Email address"
           fullWidth
@@ -87,8 +86,8 @@ const UserRegistration = () => {
           type="email"
           name="email"
           id="email"
+          required
         />
-
         <TextField
           label="Phone Number"
           fullWidth
@@ -96,15 +95,16 @@ const UserRegistration = () => {
           type="text"
           name="contactNumber"
           id="contactNumber"
+          required
         />
-
         <TextField
           type="password"
           name="password"
           id="password"
           label="Password"
-          fullWidth
           margin="normal"
+          sx={{ mr: 5 }}
+          required
         />
 
         <TextField
@@ -112,17 +112,15 @@ const UserRegistration = () => {
           name="password-confirmation"
           id="password-confirmation"
           label="Confirm Password"
-          fullWidth
           margin="normal"
+          required
         />
-
         <FormControlLabel
           label="I agree to term and condition."
           control={
             <Checkbox value="checked" name="termCondition" id="termCondition" />
           }
         />
-
         <Box textAlign="center">
           <Button
             type="submit"
@@ -132,7 +130,6 @@ const UserRegistration = () => {
             Register
           </Button>
         </Box>
-
         {errorSuccess.status ? (
           <Alert severity={errorSuccess.type}>{errorSuccess.message}</Alert>
         ) : (

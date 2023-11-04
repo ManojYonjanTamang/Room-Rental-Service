@@ -21,7 +21,7 @@ const LoginReg = () => {
 
   return (
     <div>
-      <Grid container sx={{ height: "85vh" }}>
+      <Grid container sx={{ height: "90vh" }}>
         <Grid
           item
           lg={7}
@@ -37,8 +37,8 @@ const LoginReg = () => {
 
         <Grid item lg={5} sm={7} xs={12}>
           <Card sx={{ width: "100%", height: "100%" }}>
-            <Box>
-              <Box sx={{ borderBottom: 1, borderColor: "primary.main" }}>
+            <Box sx={{ mx: 2 }}>
+              <Box sx={{ borderBottom: 1, borderColor: "gray" }}>
                 <Tabs value={value} onChange={handleChange}>
                   <Tab
                     label="Login"
