@@ -1,0 +1,248 @@
+[1mdiff --git a/src/App.jsx b/src/App.jsx[m
+[1mindex 3956e9a..2d47c13 100644[m
+[1m--- a/src/App.jsx[m
+[1m+++ b/src/App.jsx[m
+[36m@@ -1,10 +1,9 @@[m
+ import { BrowserRouter, Route, Routes } from "react-router-dom";[m
+ import LoginReg from "./components/pages/auth/LoginReg";[m
+[31m-import Navbar from "./components/Navbar";[m
+ import Layout from "./components/pages/Layout";[m
+ import Home from "./components/pages/Home";[m
+ import Contact from "./components/pages/Contact";[m
+[31m-import UserLogin from "./components/pages/auth/UserLogin";[m
+[32m+[m[32mimport ForgotPwdSendEmail from "./components/pages/auth/ForgotPwdSendEmail";[m
+ import ResetPassword from "./components/pages/auth/ResetPassword";[m
+ [m
+ function App() {[m
+[36m@@ -16,7 +15,12 @@[m [mfunction App() {[m
+             <Route index element={<Home />} />[m
+             <Route path="contact" element={<Contact />} />[m
+             <Route path="login" element={<LoginReg />} />[m
+[31m-            <Route path="resetPassword" element={<ResetPassword />} />[m
+[32m+[m[32m            <Route[m
+[32m+[m[32m              path="forgot-password-send-email"[m
+[32m+[m[32m              element={<ForgotPwdSendEmail />}[m
+[32m+[m[32m            />[m
+[32m+[m[32m            <Route path="reset-password" element={<ResetPassword />} />[m
+[32m+[m[32m            ResetPassword[m
+           </Route>[m
+         </Routes>[m
+       </BrowserRouter>[m
+[1mdiff --git a/src/components/pages/auth/ForgotPwdSendEmail.jsx b/src/components/pages/auth/ForgotPwdSendEmail.jsx[m
+[1mnew file mode 100644[m
+[1mindex 0000000..0d53885[m
+[1m--- /dev/null[m
+[1m+++ b/src/components/pages/auth/ForgotPwdSendEmail.jsx[m
+[36m@@ -0,0 +1,75 @@[m
+[32m+[m[32mimport { Alert, Box, Button, Grid, TextField } from "@mui/material";[m
+[32m+[m[32mimport React, { useState } from "react";[m
+[32m+[m
+[32m+[m[32mconst ForgotPwdSendEmail = () => {[m
+[32m+[m[32m  const [errorSuccess, setErrorSuccess] = useState({[m
+[32m+[m[32m    status: false,[m
+[32m+[m[32m    message: "",[m
+[32m+[m[32m    type: "",[m
+[32m+[m[32m  });[m
+[32m+[m
+[32m+[m[32m  const handleSubmit = (e) => {[m
+[32m+[m[32m    e.preventDefault();[m
+[32m+[m[32m    const formData = new FormData(e.currentTarget);[m
+[32m+[m[32m    const actualData = {[m
+[32m+[m[32m      email: formData.get("email"),[m
+[32m+[m[32m    };[m
+[32m+[m
+[32m+[m[32m    if (actualData.email) {[m
+[32m+[m[32m      document.getElementById("forgot-password-send-email").reset();[m
+[32m+[m[32m      setErrorSuccess({[m
+[32m+[m[32m        status: true,[m
+[32m+[m[32m        message: "Please check your email to reset password",[m
+[32m+[m[32m        type: "success",[m
+[32m+[m[32m      });[m
+[32m+[m[32m    } else {[m
+[32m+[m[32m      setErrorSuccess({[m
+[32m+[m[32m        status: true,[m
+[32m+[m[32m        message: "Please provide valid email",[m
+[32m+[m[32m        type: "error",[m
+[32m+[m[32m      });[m
+[32m+[m[32m    }[m
+[32m+[m[32m  };[m
+[32m+[m[32m  return ([m
+[32m+[m[32m    <>[m
+[32m+[m[32m      <Grid container justifyContent="center">[m
+[32m+[m[32m        <Grid>[m
+[32m+[m[32m          <Box[m
+[32m+[m[32m            component="form"[m
+[32m+[m[32m            noValidate[m
+[32m+[m[32m            sx={{ mt: 1 }}[m
+[32m+[m[32m            id="forgot-password-send-email"[m
+[32m+[m[32m            onSubmit={handleSubmit}[m
+[32m+[m[32m          >[m
+[32m+[m[32m            <TextField[m
+[32m+[m[32m              margin="normal"[m
+[32m+[m[32m              required[m
+[32m+[m[32m              fullWidth[m
+[32m+[m[32m              id="email"[m
+[32m+[m[32m              name="email"[m
+[32m+[m[32m              label="Enter your email address"[m
+[32m+[m[32m            />[m
+[32m+[m
+[32m+[m[32m            <Box textAlign="center">[m
+[32m+[m[32m              <Button[m
+[32m+[m[32m                type="submit"[m
+[32m+[m[32m                variant="contained"[m
+[32m+[m[32m                sx={{ mt: 3, px: 5, mb: 2 }}[m
+[32m+[m[32m              >[m
+[32m+[m[32m                Send[m
+[32m+[m[32m              </Button>[m
+[32m+[m[32m            </Box>[m
+[32m+[m
+[32m+[m[32m            {errorSuccess.status ? ([m
+[32m+[m[32m              <Alert severity={errorSuccess.type}>{errorSuccess.message}</Alert>[m
+[32m+[m[32m            ) : ([m
+[32m+[m[32m              ""[m
+[32m+[m[32m            )}[m
+[32m+[m[32m          </Box>[m
+[32m+[m[32m        </Grid>[m
+[32m+[m[32m      </Grid>[m
+[32m+[m[32m    </>[m
+[32m+[m[32m  );[m
+[32m+[m[32m};[m
+[32m+[m
+[32m+[m[32mexport default ForgotPwdSendEmail;[m
+[1mdiff --git a/src/components/pages/auth/ResetPassword.jsx b/src/components/pages/auth/ResetPassword.jsx[m
+[1mindex 890e551..092391d 100644[m
+[1m--- a/src/components/pages/auth/ResetPassword.jsx[m
+[1m+++ b/src/components/pages/auth/ResetPassword.jsx[m
+[36m@@ -1,7 +1,9 @@[m
+[31m-import { Alert, Box, Button, Grid, TextField } from "@mui/material";[m
+[31m-import React, { useState } from "react";[m
+[32m+[m[32mimport { Grid, Box, TextField, Alert, Button } from "@mui/material";[m
+[32m+[m[32mimport { useState } from "react";[m
+[32m+[m[32mimport { useNavigate } from "react-router-dom";[m
+ [m
+ const ResetPassword = () => {[m
+[32m+[m[32m  const navigate = useNavigate();[m
+   const [errorSuccess, setErrorSuccess] = useState({[m
+     status: false,[m
+     message: "",[m
+[36m@@ -12,20 +14,32 @@[m [mconst ResetPassword = () => {[m
+     e.preventDefault();[m
+     const formData = new FormData(e.currentTarget);[m
+     const actualData = {[m
+[31m-      email: formData.get("email"),[m
+[32m+[m[32m      password: formData.get("password"),[m
+[32m+[m[32m      confirmPassword: formData.get("password-confirmation"),[m
+     };[m
+ [m
+[31m-    if (actualData.email) {[m
+[31m-      document.getElementById("password-reset-form").reset();[m
+[31m-      setErrorSuccess({[m
+[31m-        status: true,[m
+[31m-        message: "Please check your email to reset password",[m
+[31m-        type: "success",[m
+[31m-      });[m
+[32m+[m[32m    if (actualData.password && actualData.confirmPassword) {[m
+[32m+[m[32m      if (actualData.password === actualData.confirmPassword) {[m
+[32m+[m[32m        document.getElementById("reset-password").reset();[m
+[32m+[m[32m        setErrorSuccess({[m
+[32m+[m[32m          status: true,[m
+[32m+[m[32m          message: "Reset Password Successful. Redirecting to Login Page...",[m
+[32m+[m[32m          type: "success",[m
+[32m+[m[32m        });[m
+[32m+[m[32m        setTimeout(() => {[m
+[32m+[m[32m          navigate("/");[m
+[32m+[m[32m        }, 2000);[m
+[32m+[m[32m      } else {[m
+[32m+[m[32m        setErrorSuccess({[m
+[32m+[m[32m          status: true,[m
+[32m+[m[32m          message: "Password not matching!",[m
+[32m+[m[32m          type: "error",[m
+[32m+[m[32m        });[m
+[32m+[m[32m      }[m
+     } else {[m
+       setErrorSuccess({[m
+         status: true,[m
+[31m-        message: "Please provide valid email",[m
+[32m+[m[32m        message: "All fields are required!",[m
+         type: "error",[m
+       });[m
+     }[m
+[36m@@ -38,16 +52,27 @@[m [mconst ResetPassword = () => {[m
+             component="form"[m
+             noValidate[m
+             sx={{ mt: 1 }}[m
+[31m-            id="password-reset-form"[m
+[32m+[m[32m            id="reset-password"[m
+             onSubmit={handleSubmit}[m
+           >[m
+             <TextField[m
+[32m+[m[32m              type="password"[m
+[32m+[m[32m              name="password"[m
+[32m+[m[32m              id="password"[m
+[32m+[m[32m              label="New Password"[m
+[32m+[m[32m              fullWidth[m
+               margin="normal"[m
+               required[m
+[32m+[m[32m            />[m
+[32m+[m
+[32m+[m[32m            <TextField[m
+[32m+[m[32m              type="password"[m
+[32m+[m[32m              name="password-confirmation"[m
+[32m+[m[32m              id="password-confirmation"[m
+[32m+[m[32m              label="Confirm New Password"[m
+               fullWidth[m
+[31m-              id="email"[m
+[31m-              name="email"[m
+[31m-              label="Enter your email address"[m
+[32m+[m[32m              margin="normal"[m
+[32m+[m[32m              required[m
+             />[m
+ [m
+             <Box textAlign="center">[m
+[36m@@ -56,7 +81,7 @@[m [mconst ResetPassword = () => {[m
+                 variant="contained"[m
+                 sx={{ mt: 3, px: 5, mb: 2 }}[m
+               >[m
+[31m-                Send[m
+[32m+[m[32m                Save[m
+               </Button>[m
+             </Box>[m
+ [m
+[1mdiff --git a/src/components/pages/auth/UserLogin.jsx b/src/components/pages/auth/UserLogin.jsx[m
+[1mindex 7c5538e..3e02b0a 100644[m
+[1m--- a/src/components/pages/auth/UserLogin.jsx[m
+[1m+++ b/src/components/pages/auth/UserLogin.jsx[m
+[36m@@ -79,7 +79,7 @@[m [mconst UserLogin = () => {[m
+           </Button>[m
+         </Box>[m
+ [m
+[31m-        <NavLink to="/resetPassword">Forgot Password?</NavLink>[m
+[32m+[m[32m        <NavLink to="/forgot-password-send-email">Forgot Password?</NavLink>[m
+ [m
+         {errorSuccess.status ? ([m
+           <Alert severity={errorSuccess.type}>{errorSuccess.message}</Alert>[m
+[1mdiff --git a/src/components/pages/auth/UserRegistration.jsx b/src/components/pages/auth/UserRegistration.jsx[m
+[1mindex e497083..ec57fda 100644[m
+[1m--- a/src/components/pages/auth/UserRegistration.jsx[m
+[1m+++ b/src/components/pages/auth/UserRegistration.jsx[m
+[36m@@ -24,9 +24,9 @@[m [mconst UserRegistration = () => {[m
+     const actualData = {[m
+       name: formData.get("name"),[m
+       email: formData.get("email"),[m
+[31m-      password: formData.get("password"),[m
+       contactNumber: formData.get("contactNumber"),[m
+[31m-      password_confirmation: formData.get("password-confirmation"),[m
+[32m+[m[32m      password: formData.get("password"),[m
+[32m+[m[32m      confirmPassword: formData.get("password-confirmation"),[m
+       termCondition: formData.get("termCondition"),[m
+     };[m
+ [m
+[36m@@ -37,7 +37,7 @@[m [mconst UserRegistration = () => {[m
+       actualData.password &&[m
+       actualData.termCondition[m
+     ) {[m
+[31m-      if (actualData.password === actualData.password_confirmation) {[m
+[32m+[m[32m      if (actualData.password === actualData.confirmPassword) {[m
+         console.log(actualData);[m
+         document.getElementById("registration_form").reset();[m
+         setErrorSuccess({[m

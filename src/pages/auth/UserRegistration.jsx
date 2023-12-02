@@ -1,5 +1,4 @@
 import {
-  Alert,
   Box,
   Button,
   Checkbox,
@@ -8,17 +7,16 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useRegisterUserMutation } from "../../services/userAuthApi";
 
 const UserRegistration = () => {
-  const [errorSuccess, setErrorSuccess] = useState({
-    status: false,
-    message: "",
-    type: "",
-  });
+  const [serverError, setServerError] = useState();
+
+  const [registerUser, { isLoading }] = useRegisterUserMutation();
 
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const actualData = {
@@ -30,37 +28,7 @@ const UserRegistration = () => {
       termCondition: formData.get("termCondition"),
     };
 
-    if (
-      actualData.name &&
-      actualData.email &&
-      actualData.contactNumber &&
-      actualData.password &&
-      actualData.termCondition
-    ) {
-      if (actualData.password === actualData.confirmPassword) {
-        console.log(actualData);
-        document.getElementById("registration_form").reset();
-        setErrorSuccess({
-          status: true,
-          message: "Registration Success",
-          type: "success",
-        });
-        navigate("/contact");
-      } else {
-        setErrorSuccess({
-          status: true,
-          message: "Password and Confirm Password should match!",
-          type: "error",
-        });
-      }
-    } else {
-      console.log("error");
-      setErrorSuccess({
-        status: true,
-        message: "All fields are required",
-        type: "error",
-      });
-    }
+    const res = await registerUser(actualData);
   };
 
   return (
@@ -68,8 +36,9 @@ const UserRegistration = () => {
       <Box
         component="form"
         id="registration_form"
-        mt={2}
+        sx={{ mt: 2 }}
         onSubmit={handleSubmit}
+        noValidate
       >
         <TextField
           label="Name"
@@ -78,8 +47,8 @@ const UserRegistration = () => {
           type="name"
           name="name"
           id="name"
+          required
         />
-
         <TextField
           label="Email address"
           fullWidth
@@ -87,8 +56,8 @@ const UserRegistration = () => {
           type="email"
           name="email"
           id="email"
+          required
         />
-
         <TextField
           label="Phone Number"
           fullWidth
@@ -96,15 +65,16 @@ const UserRegistration = () => {
           type="text"
           name="contactNumber"
           id="contactNumber"
+          required
         />
-
         <TextField
           type="password"
           name="password"
           id="password"
           label="Password"
-          fullWidth
           margin="normal"
+          sx={{ mr: 5 }}
+          required
         />
 
         <TextField
@@ -112,17 +82,15 @@ const UserRegistration = () => {
           name="password-confirmation"
           id="password-confirmation"
           label="Confirm Password"
-          fullWidth
           margin="normal"
+          required
         />
-
         <FormControlLabel
           label="I agree to term and condition."
           control={
-            <Checkbox value="checked" name="termCondition" id="termCondition" />
+            <Checkbox value={true} name="termCondition" id="termCondition" />
           }
         />
-
         <Box textAlign="center">
           <Button
             type="submit"
@@ -132,12 +100,6 @@ const UserRegistration = () => {
             Register
           </Button>
         </Box>
-
-        {errorSuccess.status ? (
-          <Alert severity={errorSuccess.type}>{errorSuccess.message}</Alert>
-        ) : (
-          ""
-        )}
       </Box>
     </>
   );

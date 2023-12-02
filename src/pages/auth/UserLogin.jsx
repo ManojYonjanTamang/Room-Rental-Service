@@ -31,7 +31,7 @@ const UserLogin = () => {
       //   type: "success",
       // });
 
-      navigate("/"); // later navigate to dashboard
+      navigate("/dashboard");
     } else {
       setErrorSuccess({
         status: true,
@@ -48,6 +48,7 @@ const UserLogin = () => {
         id="login-form"
         sx={{ mt: 2 }}
         onSubmit={handleSubmit}
+        noValidate
       >
         <TextField
           label="Email Address"
@@ -56,7 +57,7 @@ const UserLogin = () => {
           id="email"
           name="email"
           type="email"
-          // required
+          required
         />
 
         <TextField
@@ -66,7 +67,7 @@ const UserLogin = () => {
           id="password"
           name="password"
           type="password"
-          // required
+          required
         />
 
         <Box textAlign="center">
