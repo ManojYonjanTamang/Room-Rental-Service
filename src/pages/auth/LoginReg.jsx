@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Card, Grid, Box, Tabs, Tab } from "@mui/material";
-import LoginImg from "../../../images/LoginImg.png";
+import LoginImg from "../../images/LoginImg.png";
 import UserLogin from "./UserLogin";
 import UserRegistration from "./UserRegistration";
 

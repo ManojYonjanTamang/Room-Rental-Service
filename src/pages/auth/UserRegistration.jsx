@@ -1,5 +1,4 @@
 import {
-  Alert,
   Box,
   Button,
   Checkbox,
@@ -8,17 +7,15 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useRegisterUserMutation } from "../../services/userAuthApi";
 
 const UserRegistration = () => {
-  const [errorSuccess, setErrorSuccess] = useState({
-    status: false,
-    message: "",
-    type: "",
-  });
+  const [serverError, setServerError] = useState();
+  const [registerUser, { isLoading }] = useRegisterUserMutation();
 
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const actualData = {
@@ -30,35 +27,7 @@ const UserRegistration = () => {
       termCondition: formData.get("termCondition"),
     };
 
-    if (
-      actualData.name &&
-      actualData.email &&
-      actualData.contactNumber &&
-      actualData.password &&
-      actualData.termCondition
-    ) {
-      if (actualData.password === actualData.confirmPassword) {
-        document.getElementById("registration_form").reset();
-        setErrorSuccess({
-          status: true,
-          message: "Registration Success",
-          type: "success",
-        });
-        navigate("/dashboard");
-      } else {
-        setErrorSuccess({
-          status: true,
-          message: "Password and Confirm Password should match!",
-          type: "error",
-        });
-      }
-    } else {
-      setErrorSuccess({
-        status: true,
-        message: "All fields are required",
-        type: "error",
-      });
-    }
+    const res = await registerUser(actualData);
   };
 
   return (
@@ -130,11 +99,6 @@ const UserRegistration = () => {
             Register
           </Button>
         </Box>
-        {errorSuccess.status ? (
-          <Alert severity={errorSuccess.type}>{errorSuccess.message}</Alert>
-        ) : (
-          ""
-        )}
       </Box>
     </>
   );
