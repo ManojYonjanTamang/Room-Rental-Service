@@ -11,6 +11,7 @@ import { useRegisterUserMutation } from "../../services/userAuthApi";
 
 const UserRegistration = () => {
   const [serverError, setServerError] = useState();
+
   const [registerUser, { isLoading }] = useRegisterUserMutation();
 
   const navigate = useNavigate();
@@ -87,7 +88,7 @@ const UserRegistration = () => {
         <FormControlLabel
           label="I agree to term and condition."
           control={
-            <Checkbox value="checked" name="termCondition" id="termCondition" />
+            <Checkbox value={true} name="termCondition" id="termCondition" />
           }
         />
         <Box textAlign="center">
