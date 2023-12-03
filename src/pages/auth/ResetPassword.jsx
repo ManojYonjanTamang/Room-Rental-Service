@@ -15,7 +15,7 @@ const ResetPassword = () => {
     const formData = new FormData(e.currentTarget);
     const actualData = {
       password: formData.get("password"),
-      confirmPassword: formData.get("password-confirmation"),
+      confirmPassword: formData.get("password2"),
     };
 
     if (actualData.password && actualData.confirmPassword) {
@@ -67,8 +67,8 @@ const ResetPassword = () => {
 
             <TextField
               type="password"
-              name="password-confirmation"
-              id="password-confirmation"
+              name="password2"
+              id="password2"
               label="Confirm New Password"
               fullWidth
               margin="normal"

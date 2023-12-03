@@ -1,16 +1,19 @@
 import {
+  Alert,
   Box,
   Button,
   Checkbox,
   FormControlLabel,
   TextField,
+  Typography,
+  CircularProgress,
 } from "@mui/material";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRegisterUserMutation } from "../../services/userAuthApi";
 
 const UserRegistration = () => {
-  const [serverError, setServerError] = useState();
+  const [serverError, setServerError] = useState({});
 
   const [registerUser, { isLoading }] = useRegisterUserMutation();
 
@@ -22,17 +25,33 @@ const UserRegistration = () => {
     const actualData = {
       name: formData.get("name"),
       email: formData.get("email"),
-      contactNumber: formData.get("contactNumber"),
+      phone: formData.get("phone"),
       password: formData.get("password"),
-      confirmPassword: formData.get("password-confirmation"),
+      password2: formData.get("password2"),
       termCondition: formData.get("termCondition"),
     };
 
     const res = await registerUser(actualData);
+
+    if (res.error) {
+      console.log(res.error.data);
+      setServerError(res.error.data);
+    }
+    if (res.data) {
+      // console.log(res.data);
+      navigate("/dashboard");
+    }
   };
 
   return (
     <>
+      {/* {serverError.email ? console.log(serverError.email[0]) : ""}
+      {serverError.password ? console.log(serverError.password[0]) : ""}
+      {serverError.password2 ? console.log(serverError.password2[0]) : ""}
+      {serverError.termCondition
+        ? console.log(serverError.termCondition[0])
+        : ""} */}
+
       <Box
         component="form"
         id="registration_form"
@@ -49,6 +68,13 @@ const UserRegistration = () => {
           id="name"
           required
         />
+        {serverError.name ? (
+          <Typography style={{ fontSize: 12, color: "red", paddingLeft: 10 }}>
+            {serverError.name[0]}
+          </Typography>
+        ) : (
+          ""
+        )}
         <TextField
           label="Email address"
           fullWidth
@@ -58,15 +84,29 @@ const UserRegistration = () => {
           id="email"
           required
         />
+        {serverError.email ? (
+          <Typography style={{ fontSize: 12, color: "red", paddingLeft: 10 }}>
+            {serverError.email[0]}
+          </Typography>
+        ) : (
+          ""
+        )}
         <TextField
           label="Phone Number"
           fullWidth
           margin="normal"
           type="text"
-          name="contactNumber"
-          id="contactNumber"
+          name="phone"
+          id="phone"
           required
-        />
+        />{" "}
+        {serverError.phone ? (
+          <Typography style={{ fontSize: 12, color: "red", paddingLeft: 10 }}>
+            {serverError.phone[0]}
+          </Typography>
+        ) : (
+          ""
+        )}
         <TextField
           type="password"
           name="password"
@@ -76,30 +116,60 @@ const UserRegistration = () => {
           sx={{ mr: 5 }}
           required
         />
-
+        {serverError.password ? (
+          <Typography style={{ fontSize: 12, color: "red", paddingLeft: 10 }}>
+            {serverError.password[0]}
+          </Typography>
+        ) : (
+          ""
+        )}
         <TextField
           type="password"
-          name="password-confirmation"
-          id="password-confirmation"
+          name="password2"
+          id="password2"
           label="Confirm Password"
           margin="normal"
           required
         />
+        {serverError.password2 ? (
+          <Typography style={{ fontSize: 12, color: "red", paddingLeft: 10 }}>
+            {serverError.password2[0]}
+          </Typography>
+        ) : (
+          ""
+        )}
         <FormControlLabel
           label="I agree to term and condition."
           control={
             <Checkbox value={true} name="termCondition" id="termCondition" />
           }
         />
+        {serverError.termCondition ? (
+          <span style={{ fontSize: 12, color: "red", paddingLeft: 10 }}>
+            {serverError.termCondition[0]}
+          </span>
+        ) : (
+          ""
+        )}
         <Box textAlign="center">
-          <Button
-            type="submit"
-            variant="contained"
-            sx={{ mt: 2, mb: 2, px: 4 }}
-          >
-            Register
-          </Button>
+          {isLoading ? (
+            <CircularProgress />
+          ) : (
+            <Button
+              type="submit"
+              variant="contained"
+              sx={{ mt: 2, mb: 2, px: 4 }}
+            >
+              Register
+            </Button>
+          )}
         </Box>
+        {/* non_field_errors */}
+        {serverError.non_field_errors ? (
+          <Alert severity="error">{serverError.non_field_errors[0]}</Alert>
+        ) : (
+          ""
+        )}
       </Box>
     </>
   );
