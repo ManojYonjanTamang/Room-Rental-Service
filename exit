@@ -131,7 +131,7 @@
      const actualData = {[m
 [31m-      email: formData.get("email"),[m
 [32m+[m[32m      password: formData.get("password"),[m
-[32m+[m[32m      confirmPassword: formData.get("password-confirmation"),[m
+[32m+[m[32m      confirmPassword: formData.get("password2"),[m
      };[m
  [m
 [31m-    if (actualData.email) {[m
@@ -187,8 +187,8 @@
 [32m+[m
 [32m+[m[32m            <TextField[m
 [32m+[m[32m              type="password"[m
-[32m+[m[32m              name="password-confirmation"[m
-[32m+[m[32m              id="password-confirmation"[m
+[32m+[m[32m              name="password2"[m
+[32m+[m[32m              id="password2"[m
 [32m+[m[32m              label="Confirm New Password"[m
                fullWidth[m
 [31m-              id="email"[m
@@ -230,10 +230,10 @@
        name: formData.get("name"),[m
        email: formData.get("email"),[m
 [31m-      password: formData.get("password"),[m
-       contactNumber: formData.get("contactNumber"),[m
-[31m-      password_confirmation: formData.get("password-confirmation"),[m
+       phone: formData.get("phone"),[m
+[31m-      password_confirmation: formData.get("password2"),[m
 [32m+[m[32m      password: formData.get("password"),[m
-[32m+[m[32m      confirmPassword: formData.get("password-confirmation"),[m
+[32m+[m[32m      confirmPassword: formData.get("password2"),[m
        termCondition: formData.get("termCondition"),[m
      };[m
  [m
