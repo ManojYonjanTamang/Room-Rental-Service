@@ -11,6 +11,7 @@ import {
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRegisterUserMutation } from "../../services/userAuthApi";
+import { storeToken } from "../../services/LocalStorageService";
 
 const UserRegistration = () => {
   const [serverError, setServerError] = useState({});
@@ -34,11 +35,11 @@ const UserRegistration = () => {
     const res = await registerUser(actualData);
 
     if (res.error) {
-      console.log(res.error.data);
+      // console.log(res.error.data);
       setServerError(res.error.data);
     }
     if (res.data) {
-      // console.log(res.data);
+      storeToken(res.data.token);
       navigate("/dashboard");
     }
   };

@@ -10,6 +10,7 @@ import {
 
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { removeToken } from "../services/LocalStorageService";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -20,7 +21,8 @@ const Dashboard = () => {
     type: "",
   });
 
-  const handleClick = () => {
+  const handleLogout = () => {
+    removeToken();
     navigate("/login");
   };
 
@@ -77,7 +79,7 @@ const Dashboard = () => {
             color="warning"
             size="medium"
             sx={{ mt: 8 }}
-            onClick={handleClick}
+            onClick={handleLogout}
           >
             Logout
           </Button>

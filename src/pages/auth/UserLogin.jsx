@@ -9,6 +9,7 @@ import {
 import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useLoginUserMutation } from "../../services/userAuthApi";
+import { storeToken } from "../../services/LocalStorageService";
 
 const UserLogin = () => {
   const [serverError, setServerError] = useState({});
@@ -31,13 +32,13 @@ const UserLogin = () => {
 
     // backend validation
     const res = await loginUser(actualData);
-
-    console.log(res);
+    // console.log(res);
     if (res.error) {
       setServerError(res.error.data.errors);
     }
     if (res.data) {
-      console.log(res.data);
+      // console.log(res.data);
+      storeToken(res.data.token);
       navigate("/dashboard");
     }
 
