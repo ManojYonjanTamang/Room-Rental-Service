@@ -5,7 +5,7 @@ import { getToken } from "../services/LocalStorageService";
 
 function Navbar() {
   const { accessToken } = getToken();
-  console.log(accessToken);
+  // console.log(accessToken);
 
   return (
     <>
@@ -13,7 +13,7 @@ function Navbar() {
         <AppBar position="static" color="primary">
           <Toolbar>
             <Typography variant="h4" component="div" sx={{ flexGrow: 1 }}>
-              Bhadama
+              e-Room
             </Typography>
             <Button
               component={NavLink}

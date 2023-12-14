@@ -1,49 +1,44 @@
-import { Grid, Box, TextField, Alert, Button } from "@mui/material";
+import { Grid, Box, TextField, Alert, Button, Typography } from "@mui/material";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useResetPasswordMutation } from "../../services/userAuthApi";
+import { useNavigate, useParams } from "react-router-dom";
 
 const ResetPassword = () => {
-  const navigate = useNavigate();
-  const [errorSuccess, setErrorSuccess] = useState({
-    status: false,
-    message: "",
-    type: "",
-  });
+  const [resetPassword] = useResetPasswordMutation();
+  const [serverError, setServerError] = useState({});
+  const [serverMsg, setServerMsg] = useState({});
+  const { id, token } = useParams();
 
-  const handleSubmit = (e) => {
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const actualData = {
       password: formData.get("password"),
-      confirmPassword: formData.get("password2"),
+      password2: formData.get("password2"),
     };
 
-    if (actualData.password && actualData.confirmPassword) {
-      if (actualData.password === actualData.confirmPassword) {
-        document.getElementById("reset-password").reset();
-        setErrorSuccess({
-          status: true,
-          message: "Reset Password Successful. Redirecting to Login Page...",
-          type: "success",
-        });
-        setTimeout(() => {
-          navigate("/");
-        }, 2000);
-      } else {
-        setErrorSuccess({
-          status: true,
-          message: "Password not matching!",
-          type: "error",
-        });
-      }
-    } else {
-      setErrorSuccess({
-        status: true,
-        message: "All fields are required!",
-        type: "error",
-      });
+    console.log(actualData);
+    const res = await resetPassword({ actualData, id, token });
+    console.log(res);
+
+    if (res.error) {
+      setServerMsg({});
+      setServerError(res.error.data.errors);
+    }
+
+    if (res.data) {
+      setServerError({});
+      setServerMsg(res.data);
+      document.getElementById("reset-password").reset();
+
+      setTimeout(() => {
+        navigate("/login");
+      }, 3000);
     }
   };
+
   return (
     <>
       <Grid container justifyContent="center">
@@ -64,6 +59,15 @@ const ResetPassword = () => {
               margin="normal"
               required
             />
+            {serverError.password ? (
+              <Typography
+                style={{ fontSize: 12, color: "red", paddingLeft: 10 }}
+              >
+                {serverError.password[0]}
+              </Typography>
+            ) : (
+              ""
+            )}
 
             <TextField
               type="password"
@@ -75,6 +79,16 @@ const ResetPassword = () => {
               required
             />
 
+            {serverError.password2 ? (
+              <Typography
+                style={{ fontSize: 12, color: "red", paddingLeft: 10 }}
+              >
+                {serverError.password2[0]}
+              </Typography>
+            ) : (
+              ""
+            )}
+
             <Box textAlign="center">
               <Button
                 type="submit"
@@ -84,13 +98,19 @@ const ResetPassword = () => {
                 Save
               </Button>
             </Box>
-
-            {errorSuccess.status ? (
-              <Alert severity={errorSuccess.type}>{errorSuccess.message}</Alert>
-            ) : (
-              ""
-            )}
           </Box>
+
+          {serverMsg.non_field_errirs ? (
+            <Alert severity="error">{serverMsg.non_field_errirs}</Alert>
+          ) : (
+            ""
+          )}
+
+          {serverMsg.message ? (
+            <Alert severity="success">{serverMsg.message}</Alert>
+          ) : (
+            ""
+          )}
         </Grid>
       </Grid>
     </>
