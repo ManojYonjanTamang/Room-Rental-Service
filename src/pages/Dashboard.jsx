@@ -8,55 +8,62 @@ import {
   Typography,
 } from "@mui/material";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { getToken, removeToken } from "../services/LocalStorageService";
+import { useDispatch, useSelector } from "react-redux";
+import { unSetUserToken } from "../features/authSlice";
+import {
+  useChangeUserPasswordMutation,
+  useGetLoggedUserQuery,
+} from "../services/userAuthApi";
+import { setUserInfo, unSetUserInfo } from "../features/userSlice";
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const [errorSuccess, setErrorSuccess] = useState({
-    status: false,
-    message: "",
-    type: "",
-  });
+  const { accessToken } = getToken();
+  const { data, isSuccess } = useGetLoggedUserQuery(accessToken);
 
-  const handleClick = () => {
+  useEffect(() => {
+    if (data && isSuccess) {
+      dispatch(setUserInfo({ email: data.email, name: data.name }));
+    }
+  }, [data, isSuccess, dispatch]);
+
+  const userData = useSelector((state) => state.user);
+
+  const [changeUserPassword] = useChangeUserPasswordMutation();
+  const [serverError, setServerError] = useState({});
+  const [serverMsg, setServerMsg] = useState({});
+
+  const handleLogout = () => {
+    dispatch(unSetUserInfo({ email: "", name: "" }));
+    dispatch(unSetUserToken({ accessToken: null }));
+    removeToken();
     navigate("/login");
   };
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const actualData = {
       password: formData.get("password"),
-      confirmPassword: formData.get("confirmPassword"),
+      password2: formData.get("password2"),
     };
 
-    if (actualData.password && actualData.confirmPassword) {
-      if (actualData.password === actualData.confirmPassword) {
-        document.getElementById("changePasswordForm").reset();
-        setErrorSuccess({
-          status: true,
-          message: "Password change successfull",
-          type: "success",
-        });
+    const res = await changeUserPassword({ actualData, accessToken });
+    console.log(res);
 
-        setTimeout(() => {
-          navigate("/login");
-        }, 2000);
-      } else {
-        setErrorSuccess({
-          status: true,
-          message: "Password and confirm password should match",
-          type: "error",
-        });
-      }
-    } else {
-      setErrorSuccess({
-        status: true,
-        message: "All fields should be filled",
-        type: "error",
-      });
+    if (res.error) {
+      setServerMsg({});
+      setServerError(res.error.data.errors);
+    }
+    if (res.data) {
+      setServerError({});
+      setServerMsg(res.data);
+      document.getElementById("changePasswordForm").reset();
     }
   };
 
@@ -70,14 +77,14 @@ const Dashboard = () => {
           sx={{ backgroundColor: "gray", p: 5, color: "white" }}
         >
           <h1>User Detail</h1>
-          <Typography variant="h5">Email: {"example@gmail.com"}</Typography>
-          <Typography variant="h6">Name: {"John Doe"}</Typography>
+          <Typography variant="h5">Email: {userData.email}</Typography>
+          <Typography variant="h6">Name: {userData.name}</Typography>
           <Button
             variant="contained"
             color="warning"
             size="medium"
             sx={{ mt: 8 }}
-            onClick={handleClick}
+            onClick={handleLogout}
           >
             Logout
           </Button>
@@ -101,15 +108,36 @@ const Dashboard = () => {
               margin="normal"
               required
             />
+
+            {serverError.password ? (
+              <Typography
+                style={{ fontSize: 12, color: "red", paddingLeft: 10 }}
+              >
+                {serverError.password[0]}
+              </Typography>
+            ) : (
+              ""
+            )}
+
             <TextField
               type="password"
-              id="confirmPassword"
-              name="confirmPassword"
+              id="password2"
+              name="password2"
               label="Confirm New Password"
               fullWidth
               margin="normal"
               required
             />
+            {serverError.password2 ? (
+              <Typography
+                style={{ fontSize: 12, color: "red", paddingLeft: 10 }}
+              >
+                {serverError.password2[0]}
+              </Typography>
+            ) : (
+              ""
+            )}
+
             <Box textAlign="center">
               <Button
                 type="submit"
@@ -119,9 +147,18 @@ const Dashboard = () => {
                 Save
               </Button>
             </Box>
-            {errorSuccess.status ? (
-              <Alert severity={errorSuccess.type}>{errorSuccess.message}</Alert>
-            ) : null}
+
+            {serverError.non_field_errors ? (
+              <Alert severity="error">{serverError.non_field_errors[0]}</Alert>
+            ) : (
+              ""
+            )}
+
+            {serverMsg.message ? (
+              <Alert severity="success">{serverMsg.message}</Alert>
+            ) : (
+              ""
+            )}
           </Box>
         </Grid>
       </Grid>

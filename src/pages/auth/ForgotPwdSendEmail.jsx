@@ -1,35 +1,33 @@
-import { Alert, Box, Button, Grid, TextField } from "@mui/material";
+import { Alert, Box, Button, Grid, TextField, Typography } from "@mui/material";
 import React, { useState } from "react";
+import { useForgotPwdSendEmailMutation } from "../../services/userAuthApi";
 
 const ForgotPwdSendEmail = () => {
-  const [errorSuccess, setErrorSuccess] = useState({
-    status: false,
-    message: "",
-    type: "",
-  });
+  const [forgotPwdSendEmail, { isLoading }] = useForgotPwdSendEmailMutation();
+  const [serverError, setServerError] = useState({});
+  const [serverMsg, setServerMsg] = useState({});
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const actualData = {
       email: formData.get("email"),
     };
 
-    if (actualData.email) {
+    const res = await forgotPwdSendEmail(actualData);
+
+    if (res.error) {
+      setServerMsg({});
+      setServerError(res.error.data.errors);
+    }
+
+    if (res.data) {
+      setServerError({});
+      setServerMsg(res.data);
       document.getElementById("forgot-password-send-email").reset();
-      setErrorSuccess({
-        status: true,
-        message: "Please check your email to reset password",
-        type: "success",
-      });
-    } else {
-      setErrorSuccess({
-        status: true,
-        message: "Please provide valid email",
-        type: "error",
-      });
     }
   };
+
   return (
     <>
       <Grid container justifyContent="center">
@@ -50,6 +48,16 @@ const ForgotPwdSendEmail = () => {
               label="Enter your email address"
             />
 
+            {serverError.email ? (
+              <Typography
+                style={{ fontSize: 12, color: "red", paddingLeft: 10 }}
+              >
+                {serverError.email[0]}
+              </Typography>
+            ) : (
+              ""
+            )}
+
             <Box textAlign="center">
               <Button
                 type="submit"
@@ -60,8 +68,14 @@ const ForgotPwdSendEmail = () => {
               </Button>
             </Box>
 
-            {errorSuccess.status ? (
-              <Alert severity={errorSuccess.type}>{errorSuccess.message}</Alert>
+            {serverError.non_field_errors ? (
+              <Alert severity="error">{serverError.non_field_errors[0]}</Alert>
+            ) : (
+              ""
+            )}
+
+            {serverMsg.message ? (
+              <Alert severity="success">{serverMsg.message}</Alert>
             ) : (
               ""
             )}

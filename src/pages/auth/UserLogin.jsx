@@ -6,20 +6,20 @@ import {
   Typography,
   CircularProgress,
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useLoginUserMutation } from "../../services/userAuthApi";
+import { getToken, storeToken } from "../../services/LocalStorageService";
+import { useDispatch } from "react-redux";
+import { setUserToken } from "../../features/authSlice";
 
 const UserLogin = () => {
   const [serverError, setServerError] = useState({});
   const [loginUser, { isLoading }] = useLoginUserMutation();
-  const [errorSuccess, setErrorSuccess] = useState({
-    status: false,
-    message: "",
-    type: "",
-  });
 
   const navigate = useNavigate();
+
+  const dispatch = useDispatch();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -31,13 +31,15 @@ const UserLogin = () => {
 
     // backend validation
     const res = await loginUser(actualData);
-
-    console.log(res);
+    // console.log(res);
     if (res.error) {
       setServerError(res.error.data.errors);
     }
     if (res.data) {
-      console.log(res.data);
+      // console.log(res.data);
+      storeToken(res.data.token);
+      let { accessToken } = getToken();
+      dispatch(setUserToken({ accessToken: accessToken }));
       navigate("/dashboard");
     }
 
@@ -54,6 +56,10 @@ const UserLogin = () => {
     //   });
     // }
   };
+  let { accessToken } = getToken();
+  useEffect(() => {
+    dispatch(setUserToken({ accessToken: accessToken }));
+  }, [accessToken, dispatch]);
 
   return (
     <>
