@@ -7,6 +7,7 @@ import ForgotPwdSendEmail from "./pages/auth/ForgotPwdSendEmail";
 import ResetPassword from "./pages/auth/ResetPassword";
 import Dashboard from "./pages/Dashboard";
 import { useSelector } from "react-redux";
+import { Add } from "./pages/Add";
 
 function App() {
   const { accessToken } = useSelector((state) => state.auth);
