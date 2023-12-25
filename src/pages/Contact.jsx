@@ -1,5 +1,6 @@
 import { Grid } from "@mui/material";
 import React from "react";
+import LeafletMap from "./LeafletMap";
 
 const Contact = () => {
   return (
@@ -28,6 +29,7 @@ const Contact = () => {
             non ipsa optio numquam? Porro voluptate voluptatibus asperiores
             inventore aliquam, debitis hic quo? Consequatur, debitis ipsa.
           </p>
+          <LeafletMap/>
         </Grid>
       </Grid>
     </>

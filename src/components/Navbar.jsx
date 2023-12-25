@@ -1,11 +1,14 @@
 import { AppBar, Box, Button, Toolbar, Typography } from "@mui/material";
-import React from "react";
+import React, { useState } from 'react';
 import { NavLink } from "react-router-dom";
 import { getToken } from "../services/LocalStorageService";
+import PostForm from "../pages/postform";
 
 function Navbar() {
   const { accessToken } = getToken();
   // console.log(accessToken);
+
+  const [isPostFormOpen, setIsPostFormOpen] = useState(false);
 
   return (
     <>
@@ -38,6 +41,18 @@ function Navbar() {
               Contact
             </Button>
 
+
+
+
+            {accessToken && (
+              <Button
+                onClick={() => setIsPostFormOpen(true)}
+                sx={{ color: "white", textTransform: "none", backgroundColor: "#1F4172" }}
+              >
+                Add Post
+              </Button>
+            )}
+
             {accessToken ? (
               <Button
                 component={NavLink}
@@ -64,6 +79,7 @@ function Navbar() {
           </Toolbar>
         </AppBar>
       </Box>
+      {isPostFormOpen && <PostForm onClose={() => setIsPostFormOpen(false)} />}
     </>
   );
 }
