@@ -18,6 +18,17 @@ function Navbar() {
 
             <Button
               component={NavLink}
+              to="/add"
+              sx={{ color: "white", textTransform: "none" }}
+              style={({ isActive }) => {
+                return { backgroundColor: isActive && "#1F4172" };
+              }}
+            >
+              Add Item
+            </Button>
+
+            <Button
+              component={NavLink}
               to="/"
               sx={{ color: "white", textTransform: "none" }}
               style={({ isActive }) => {

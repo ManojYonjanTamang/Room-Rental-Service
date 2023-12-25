@@ -7,6 +7,7 @@ import ForgotPwdSendEmail from "./pages/auth/ForgotPwdSendEmail";
 import ResetPassword from "./pages/auth/ResetPassword";
 import Dashboard from "./pages/Dashboard";
 import { useSelector } from "react-redux";
+import PostForm from "./pages/AddForm";
 
 function App() {
   const { accessToken } = useSelector((state) => state.auth);
@@ -17,6 +18,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Layout />}>
+            <Route path="/add" element={<PostForm />} />
             <Route index element={<Home />} />
             <Route path="contact" element={<Contact />} />
             <Route
