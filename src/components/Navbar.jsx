@@ -15,6 +15,7 @@ function Navbar() {
             <Typography variant="h4" component="div" sx={{ flexGrow: 1 }}>
               e-Room
             </Typography>
+
             <Button
               component={NavLink}
               to="/"
