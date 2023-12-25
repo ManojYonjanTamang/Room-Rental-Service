@@ -18,7 +18,7 @@ const Home = () => {
 
   const handleLearnMoreClick = () => {
     console.log("object clicked");
-    mutate(postId);
+    
   };
 
   return (
